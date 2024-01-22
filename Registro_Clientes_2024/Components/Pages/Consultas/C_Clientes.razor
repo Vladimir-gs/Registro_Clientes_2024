@@ -8,6 +8,29 @@
             <div class="card-header">
                 <h3>Consultas</h3>
             </div>
+
+            <div class="card-body">
+                <form>
+                    <div class="input-group d-flex aling-items-end">
+                        <InputSelect class="form-control col-2" @bind-Value="filtro">
+                            <option value="1">ClienteId</option>
+                            <option value="2">Nombre</option>
+                            <option value="3">Telefono</option>
+                        </InputSelect>
+
+                        <div class="flex-fill mx-2">
+                            <div class="input-group">
+                                <label class="input-group-text"> Busqueda </label>
+                                <InputText class="form-control" @bind-Value="Criterio" />
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-sm-10 btn-primary" @onclick="Buscar"> <span class="oi oi-magnifying-glass"></span> Buscar </button>
+
+                    </div>
+                </form>
+            </div>
+
             <table class="table table-bordered align-items-center">
 
                 <thead class="thead">
@@ -61,6 +84,28 @@
     protected override async void OnInitialized()
     {
         clientes = await clienteBLL.Listar(p => true);
+        Conteo = clientes.Count();
+    }
+
+    public async Task Buscar()
+    {
+        if (Criterio != null)
+        {
+            switch (filtro)
+            {
+                case "1":
+                    clientes = await clienteBLL.Listar(e => e.ClienteId == int.Parse(Criterio));
+                    break;
+                case "2":
+                    clientes = await clienteBLL.Listar(e => e.Nombres.ToLower().Contains(Criterio.ToLower()));
+                    break;
+                case "3":
+                    clientes = await clienteBLL.Listar(e => e.Telefono.ToString().Contains(Criterio));
+                    break;
+            }
+        }
+        else
+            clientes = await clienteBLL.Listar(p => true);
         Conteo = clientes.Count();
     }
 
