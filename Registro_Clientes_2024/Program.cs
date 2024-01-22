@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Registro_Clientes_2024.BLL;
 using Registro_Clientes_2024.Components;
 using Registro_Clientes_2024.DAL;
 
@@ -12,6 +13,8 @@ var ConStr = builder.Configuration.GetConnectionString("ConStr");
 
 builder.Services.AddDbContext<Contexto>(Options 
     => Options.UseSqlite(ConStr));
+
+builder.Services.AddScoped<ClientesBLL>();
 
 var app = builder.Build();
 
