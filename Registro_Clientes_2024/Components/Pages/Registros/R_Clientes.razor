@@ -1,0 +1,124 @@
+﻿@page "/RegistroClientes"
+@page "/RegistroClientes/{ClienteId:int}"
+@inject ClientesBLL clientesBLL;
+@rendermode InteractiveServer
+
+<PageTitle>Registro de Clientes</PageTitle>
+
+<EditForm Model="cliente" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h3>Registro de Clientes</h3>
+            </div>
+            <div class="card-body">
+                @*ClienteId:*@
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4">
+                    <label>Id Cliente:</label>
+                    <div class="input-group mb-3">
+                        <InputNumber @bind-Value="cliente.ClienteId" class="form-control" aria-describedby="BotonBuscar" />
+                        <button @onclick="Buscar" class="btn btn-primary bi bi-search-heart" type="button" id="BotonBuscar"></button>
+                    </div>
+                </div>
+                @*Nombres*@
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4">
+                    <label class ="col-form-label" for="Nombres">Nombres:</label>
+                    <InputText @bind-Value="cliente.Nombres" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.Nombres)" />
+                </div>
+                @*Telefono:*@
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4">
+                    <label>Telefono:</label>
+                    <InputText @bind-Value="cliente.Telefono" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.Telefono)" />
+
+                </div>
+
+                @*Rnc:*@
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4">
+                    <label>Rnc:</label>
+                    <InputText @bind-Value="cliente.Rnc" class="form-control"/>
+                    <ValidationMessage For="@(() => cliente.Rnc)" />
+                    
+                </div>
+                @*Email*@
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4">
+                    <label class="col-form-label" for="Email">Email:</label>
+                    <InputText @bind-Value="cliente.Email" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.Email)" />
+                </div>
+                @*Direccion*@
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4">
+                    <label class="col-form-label" for="Direccion">Direccion:</label>
+                    <InputText @bind-Value="cliente.Direccion" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.Direccion)" />
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content">
+                <div class="col-xs-18 col-sm-12 col-md-10 col-lg-30 col-xl-40">
+                    <button type="button" class="btn btn-primary bi bi-file-earmark-plus " @onclick="Nuevo"> Nuevo <i class="oi oi-file " /></button>
+                    <button type="submit" class="btn btn-success bi bi-floppy"> Guardar <i class="oi oi-document" /></button>
+                    <button type="button" class="btn btn-danger bi bi-trash3" @onclick="Eliminar"> Eliminar <i class="oi oi-trash" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int ClienteId { get; set; }
+    public Clientes cliente { get; set; } = new Clientes();
+
+    protected override async void OnInitialized()
+    {
+        Nuevo();
+        if (ClienteId > 0)
+        {
+            cliente.ClienteId = ClienteId;
+            Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+        var encontrado = await clientesBLL.FindAsync(cliente.ClienteId);
+        if (encontrado != null)
+            cliente = encontrado;
+        else
+        {            
+        }
+    }
+
+    public async Task Guardar()
+    {
+        var guardo = await clientesBLL.Guardar(cliente);
+        if (guardo)
+        {
+            Nuevo();
+        }
+        else
+        {
+        }
+    }
+
+    public void Nuevo()
+    {
+        this.cliente = new Clientes();
+    }
+
+    public async Task Eliminar()
+    {
+        var eliminado = await clientesBLL.Eliminar(cliente);
+        if (eliminado)
+        {
+            Nuevo();
+        }
+        else
+        {
+        }
+    }
+}
