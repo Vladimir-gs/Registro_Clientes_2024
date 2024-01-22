@@ -9,11 +9,9 @@ namespace Registro_Clientes_2024.Models
         [Required(ErrorMessage ="Este campo es obligatorio")]
         public string? Nombres { get; set; }
         [Required(ErrorMessage = "Este campo es obligatorio")]
-        public int Telefono { get; set; }
+        public string? Telefono { get; set; }
         [Required(ErrorMessage = "Este campo es obligatorio")]
-        public int Celular { get;}
-        [Required(ErrorMessage = "Este campo es obligatorio")]
-        public int Rnc { get; set;}
+        public string? Rnc { get; set;}
         [Required(ErrorMessage = "Este campo es obligatorio")]
         public string? Email { get; set;}
         [Required(ErrorMessage = "Este campo es obligatorio")]
